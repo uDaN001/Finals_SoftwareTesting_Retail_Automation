@@ -1,0 +1,29 @@
+{
+  "name": "finals_softwaretesting_retail_automation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uDaN001/Finals_SoftwareTesting_Retail_Automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uDaN001/Finals_SoftwareTesting_Retail_Automation/issues"
+  },
+  "homepage": "https://github.com/uDaN001/Finals_SoftwareTesting_Retail_Automation#readme",
+  "dependencies": {
+    "chromedriver": "^146.0.5",
+    "selenium-webdriver": "^4.41.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0"
+  },
+  "directories": {
+    "test": "tests"
+  }
+}
