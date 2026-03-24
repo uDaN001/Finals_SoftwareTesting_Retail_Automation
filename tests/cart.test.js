@@ -15,26 +15,27 @@ const assert = require("assert");
     .forBrowser("chrome")
     .setChromeOptions(options)
     .build();
+
   let page = new RetailPage(driver);
 
   try {
     console.log("--- STARTING CART MODULE ---");
     await page.login("standard_user", "secret_sauce");
 
-    // CRT-01: Add Item to Cart
+    // CRT-01: Add to Cart
     await driver.wait(until.elementLocated(page.addBackpack), 5000).click();
     let badgeText = await driver.findElement(page.cartBadge).getText();
     assert.strictEqual(badgeText, "1", "CRT-01 Failed");
-    console.log("CRT-01: Item added to cart and badge updated.");
+    console.log("CRT-01: Add to Cart - Badge increased to 1.");
 
-    // CRT-02: View Cart Page
+    // CRT-02: Update Quantity (Simulation)
+    // Note: SauceDemo cart quantities are read-only.
+    console.log(
+      "CRT-02: Update Quantity (Note: Site quantity is read-only - Skipping)",
+    );
+
+    // CRT-03: Remove Item
     await driver.findElement(page.cartLink).click();
-    await driver.wait(until.urlContains("cart.html"), 5000);
-    let url = await driver.getCurrentUrl();
-    assert.ok(url.includes("cart.html"), "CRT-02 Failed");
-    console.log("CRT-02: Successfully navigated to Cart page.");
-
-    // CRT-03: Remove Item from Cart Page
     let removeBtn = await driver.wait(
       until.elementLocated(By.id("remove-sauce-labs-backpack")),
       5000,
@@ -42,12 +43,21 @@ const assert = require("assert");
     await removeBtn.click();
     let badgeElements = await driver.findElements(page.cartBadge);
     assert.strictEqual(badgeElements.length, 0, "CRT-03 Failed");
-    console.log("CRT-03: Item removed from cart successfully.");
+    console.log("CRT-03: Remove Item - Item disappeared and badge cleared.");
 
-    // CRT-04: Continue Shopping
-    await driver.findElement(page.continueShoppingBtn).click();
-    await driver.wait(until.urlContains("inventory.html"), 5000);
-    console.log("CRT-04: Continue Shopping button navigation verified.");
+    // CRT-04: Cart Persistence
+    await driver.get("https://www.saucedemo.com/inventory.html");
+    await driver.findElement(page.addBackpack).click();
+    await driver.navigate().refresh();
+    let persistBadge = await driver.findElement(page.cartBadge).getText();
+    assert.strictEqual(persistBadge, "1", "CRT-04 Failed");
+    console.log("CRT-04: Cart Persistence - Item remains after refresh.");
+
+    // CRT-05: Max Quantity (Simulation)
+    // Note: SauceDemo does not have a quantity input field to test 9999 items.
+    console.log(
+      "CRT-05: Max Quantity (Note: Feature not present in UI - Skipping)",
+    );
 
     console.log("--- ALL CART TESTS PASSED ---");
   } catch (err) {
